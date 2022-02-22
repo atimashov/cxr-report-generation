@@ -15,8 +15,8 @@ class chexpert_small(Dataset):
 	def __init__(self, root = '/Users/amelia/Downloads', input_size = 224, train = True):
 		self.root = root
 		self.input_size = input_size
-		self.df = pd.read_csv('{}/CheXpert-v1.0-small/{}'.format(self.root, 'train.csv' if train else 'valid.csv'))
-		print(self.df.head())
+		self.train = train
+		self.df = pd.read_csv('{}/CheXpert-v1.0-small/{}'.format(self.root, 'train.csv' if self.train else 'valid.csv'))
 		self.classes = [
 			'No Finding', 'Enlarged Cardiomediastinum',	'Cardiomegaly', 'Lung Opacity', 'Lung Lesion',	'Edema',
 			'Consolidation', 'Pneumonia', 'Atelectasis', 'Pneumothorax', 'Pleural Effusion', 'Pleural Other', 'Fracture',
@@ -31,7 +31,7 @@ class chexpert_small(Dataset):
 		img_path = '{}/{}'.format(self.root, self.df['Path'][idx])
 		img = Image.open(img_path).convert("RGB")
 		# create targets: 1 - positive; everything else - 0;
-		targets = torch.LongTensor([self.df[col][idx] if self.df[col][idx] in [0, 1] else 0 for col in self.classes])
+		targets = torch.LongTensor([max(0, int(self.df[col][idx])) if type(self.df[col][idx]) == str else 0 for col in self.classes])
 
 		if self.train:
 			trans = transforms.Compose([
@@ -50,9 +50,9 @@ class chexpert_small(Dataset):
 		return trans(img), targets
 
 def test():
-    data = chexpert_small()
+    data = chexpert_small(root = '/atlas/u/timashov/datasets/cxr')
     data_loader = DataLoader(
-        data, batch_size = 4, shuffle = True, num_workers = 6, drop_last=True, pin_memory = True
+        data, batch_size = 4, shuffle = True, num_workers = 2, drop_last=True, pin_memory = True # TODO: increase number of workers
     )
     loop = tqdm(data_loader, leave = True)
     for batch_idx, (imgs, labels) in enumerate(loop):
