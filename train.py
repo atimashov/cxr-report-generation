@@ -46,7 +46,7 @@ def train_my(loader, model, epochs = 3, device = None, loss_func = multi_label_l
 			optimizer.step()
 
 			# display
-			loop.set_postfix(imgs_shape=loss.item())
+			loop.set_postfix(current_loss=loss.item())
 
 
 		# create checkpoint
