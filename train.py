@@ -92,4 +92,4 @@ if __name__ == '__main__':
 	}
 
 	# run training
-	hist = train_my(data_loader, model, datetime.now(), epochs = inputs.n_epochs, params = params, device = device, n_print = inputs.n_print)
+	train_my(data_loader, model, epochs = inputs.n_epochs, device = device)
