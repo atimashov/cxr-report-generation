@@ -34,7 +34,6 @@ def train_my(loader, model, epochs = 3, device = None, loss_func = multi_label_l
 			model.train()  # put model to training mode
 			imgs = imgs.to(device = device, dtype = dtype)
 			labels = labels.to(device = device, dtype = torch.long)
-			print('******', type(labels))
 
 			scores = model(imgs)
 			loss = loss_func(scores, labels)
