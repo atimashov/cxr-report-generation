@@ -9,7 +9,6 @@ class multi_label_loss(nn.Module):
         predictions = torch.sigmoid(predictions)
         print('***', predictions.dtype, target.dtype)
         loss_fn = nn.BCELoss()
-
         loss = loss_fn(predictions, target)
 
         return torch.mean(loss)
