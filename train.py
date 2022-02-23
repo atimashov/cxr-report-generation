@@ -33,7 +33,7 @@ def train_my(loader, model, epochs = 3, device = None, loss_func = multi_label_l
 		for idx, (imgs, labels) in enumerate(loop):
 			model.train()  # put model to training mode
 			imgs = imgs.to(device = device, dtype = dtype)
-			labels = labels.to(device = device).type(torch.LongTensor)
+			labels = labels.to(device = device, dtype = dtype)
 
 			scores = model(imgs)
 			loss = loss_func(scores, labels)
