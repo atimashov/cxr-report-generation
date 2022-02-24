@@ -22,8 +22,6 @@ class chexpert_small(Dataset):
 			'Consolidation', 'Pneumonia', 'Atelectasis', 'Pneumothorax', 'Pleural Effusion', 'Pleural Other', 'Fracture',
 			'Support Devices'
 		]
-		for col in self.classes:
-			print(self.df[col].unique())
 
 	def __len__(self):
 		return self.df.shape[0]
@@ -33,7 +31,7 @@ class chexpert_small(Dataset):
 		img_path = '{}/{}'.format(self.root, self.df['Path'][idx])
 		img = Image.open(img_path).convert("RGB")
 		# create targets: 1 - positive; everything else - 0;
-		targets = torch.LongTensor([max(0, int(self.df[col][idx])) if type(self.df[col][idx]) == str else 0 for col in self.classes])
+		targets = torch.tensor([self.df[col][idx] if self.df[col][idx] in [0., -1., 1.] else 0 for col in self.classes])
 
 		if self.train:
 			trans = transforms.Compose([
