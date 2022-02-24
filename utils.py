@@ -33,10 +33,10 @@ def get_metrics(loader, model, device, dtype, loss_func = multi_label_loss(), ma
             labels = labels.to(device = device, dtype = dtype)
 
             preds = model(imgs)
-            preds = torch.sigmoid(preds)
             loss = loss_func(preds, labels)
             losses.append(loss.item())
 
+            preds = torch.sigmoid(preds)
             preds[preds < 0.35] = 0.
             preds[preds.ge(0.35) & preds.le(0.65)] = 0.5
             preds[preds > 0.65] = 1.
