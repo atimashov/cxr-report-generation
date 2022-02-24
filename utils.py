@@ -31,7 +31,7 @@ def get_metrics(loader, model, device, dtype, loss_func = multi_label_loss(), ma
             # move to device, e.g. GPU
             imgs = imgs.to(device = device, dtype = dtype)
             labels = labels.to(device = device, dtype = dtype)
-
+            print(labels)
             preds = model(imgs)
             loss = loss_func(preds, labels)
             losses.append(loss.item())
@@ -42,11 +42,11 @@ def get_metrics(loader, model, device, dtype, loss_func = multi_label_loss(), ma
             preds[preds >= 0.5] = 1.
             # TODO: calculate accuracy per class
             num_correct += (preds == labels).sum()
-            num_samples += preds.size(0) * preds.size(1)
+            num_samples += preds.shape[0] * preds.shape[1]
 
             if i * imgs.shape[0] >= max_num:
                 break
-        acc = 100 * float(num_correct) / num_samples
+        acc = float(num_correct) / num_samples
         loss = sum(losses) / len(losses)
     return acc, loss
 
