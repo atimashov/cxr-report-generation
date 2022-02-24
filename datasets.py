@@ -31,7 +31,8 @@ class chexpert_small(Dataset):
 		img_path = '{}/{}'.format(self.root, self.df['Path'][idx])
 		img = Image.open(img_path).convert("RGB")
 		# create targets: 1 - positive; everything else - 0;
-		targets = torch.tensor([self.df[col][idx] if self.df[col][idx] in [0., -1., 1.] else 0 for col in self.classes])
+		targets = torch.tensor([
+			self.df[col][idx] if self.df[col][idx] in [0., 1.] else 0.5 if self.df[col][idx] == -1. else 0 for col in self.classes])
 
 		if self.train:
 			trans = transforms.Compose([
