@@ -46,9 +46,9 @@ def get_metrics(loader, model, device, dtype, loss_func = multi_label_loss(), ma
 
             if i * imgs.shape[0] >= max_num:
                 break
-		acc = 100 * float(num_correct) / num_samples
-		loss = sum(losses) / len(losses)
-	return acc, loss
+        acc = 100 * float(num_correct) / num_samples
+        loss = sum(losses) / len(losses)
+    return acc, loss
 
 
 def print_report(part, epoch = None, t = None, metrics = None):
