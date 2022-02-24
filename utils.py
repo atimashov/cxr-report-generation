@@ -38,8 +38,9 @@ def get_metrics(loader, model, device, dtype, loss_func = multi_label_loss(), ma
 
             # TODO: consider "not certain" later
             # preds = scores.copy()
-            preds[preds < 0.5] = 0.
-            preds[preds >= 0.5] = 1.
+            preds[preds < 0.35] = 0.
+            preds[preds >= 0.35 & preds < 0.65] = 0.5
+            preds[preds >= 0.65] = 1.
             # TODO: calculate accuracy per class
             num_correct += (preds == labels).sum()
             num_samples += preds.shape[0] * preds.shape[1]
@@ -75,7 +76,7 @@ def print_report(part, epoch = None, t = None, metrics = None):
         t_print = 'TRAIN   : loss = {}'.format(t_loss)
         v_print = 'VALIDATE: loss = {}'.format(v_loss)
 
-        # mAP@0.5
+        # Accuracy
         t_acc, v_acc = round(100 * train_acc, 2), round(100 * val_acc, 2)
         if '.' not in str(t_acc):
             t_acc = '{}{}.00'.format((3 - len(str(t_acc))) * ' ', t_acc)
