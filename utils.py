@@ -38,13 +38,14 @@ def get_metrics(loader, model, device, dtype, loss_func = multi_label_loss(), ma
             losses.append(loss.item())
 
             # TODO: consider "not certain" later
-            print()
-            print(preds)
+            # print()
+            # print(preds)
+            # TODO: how will we change it?
             preds[preds < 0.35] = 0.
             preds[preds.ge(0.35) & preds.le(0.65)] = 0.5
             preds[preds > 0.65] = 1.
-            print(preds)
-            print()
+            # print(preds)
+            # print()
             # TODO: calculate accuracy per class
             num_correct += (preds == labels).sum()
             num_samples += preds.shape[0] * preds.shape[1]

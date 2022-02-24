@@ -55,6 +55,7 @@ def train_my(loader, model, epochs = 3, device = None, loss_func = multi_label_l
 		print_report(part='accuracy', metrics=metrics)
 
 		# TODO: create checkpoint
+		torch.save(model.state_dict(), 'checkpoints/epoch{}_{}_{}.pt'.format(epoch, round(val_loss, 3), round(val_acc, 2)))
 
 		# print time
 		print_report(part = 'end', t = int(time() - t))
