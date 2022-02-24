@@ -22,6 +22,8 @@ class chexpert_small(Dataset):
 			'Consolidation', 'Pneumonia', 'Atelectasis', 'Pneumothorax', 'Pleural Effusion', 'Pleural Other', 'Fracture',
 			'Support Devices'
 		]
+		for col in self.classes:
+			print(self.df[col].unique())
 
 	def __len__(self):
 		return self.df.shape[0]
