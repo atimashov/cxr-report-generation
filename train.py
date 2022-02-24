@@ -6,9 +6,9 @@ from torch.utils.data import DataLoader
 import numpy as np
 from time import time, sleep
 from datetime import datetime
-# from termcolor import colored
+from termcolor import colored
 from argparse import  ArgumentParser
-from utils import init_model
+from utils import init_model, get_metrics, print_report
 from datasets import chexpert_small
 from loss import multi_label_loss
 from tqdm import tqdm
@@ -19,14 +19,12 @@ def train_my(loader, model, epochs = 3, device = None, loss_func = multi_label_l
 	optimizer = optim.Adam(model.parameters(), lr = 3e-4, weight_decay = 1e-5)
 
 	for epoch in range(epochs):
-		# t = time()
-		# print(colored('-' * 50, 'cyan'))
-		# print(colored('{} Epoch {}{} {}'.format('-' * 20, ' ' * (2 - len(str(epoch))), epoch, '-' * 20), 'cyan'))
-		# print(colored('-' * 50, 'cyan'))
-		#
-		# tacc, vacc = 0, 0
-		# tloss, vloss = 0, 0
-		# num_samples = 0
+		t = time()
+		print_report(part = 'start', epoch = epoch)
+
+		tacc, vacc = 0, 0
+		tloss, vloss = 0, 0
+		num_samples = 0
 
 		steps = 0
 		loop = tqdm(loader['train'], leave = True)
@@ -48,16 +46,18 @@ def train_my(loader, model, epochs = 3, device = None, loss_func = multi_label_l
 			# display
 			loop.set_postfix(current_loss=loss.item())
 
+		# print metrics
+		train_acc, train_loss = get_metrics(loader = loader['train'], model = model, device = device, dtype = dtype)
 
-		# create checkpoint
+		val_acc, val_loss = get_metrics(loader = loader['val'], model = model, device = device, dtype = dtype)
 
+		metrics = train_loss, val_loss, train_acc, val_acc
+		print_report(part='accuracy', metrics=metrics)
 
-		# t = int(time() - t)
-		# t_min, t_sec = str(t // 60), str(t % 60)
-		# print(colored('It took {}{} min. {}{} sec.'.format(' ' * (2 - len(t_min)), t_min, ' ' * (2 - len(t_sec)), t_sec), 'cyan'))
-		# print(colored('-' * 50, 'cyan'))
-		# print()
+		# TODO: create checkpoint
 
+		# print time
+		print_report(part = 'end', t = int(time() - t))
 if __name__ == '__main__':
 	parser = ArgumentParser()
 	# parser.add_argument('--model', type=str, default='my_alexnet', help='model name: my_alexnet, alexnet, my_vgg16, vgg16')
