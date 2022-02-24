@@ -32,12 +32,12 @@ def get_metrics(loader, model, device, dtype, loss_func = multi_label_loss(), ma
             imgs = imgs.to(device = device, dtype = dtype)
             labels = labels.to(device = device, dtype = dtype)
 
-            scores = model(imgs)
-            loss = loss_func(scores, labels)
+            preds = model(imgs)
+            loss = loss_func(preds, labels)
             losses.append(loss.item())
 
             # TODO: consider "not certain" later
-            preds = scores.copy()
+            # preds = scores.copy()
             preds[preds < 0.5] = 0.
             preds[preds >= 0.5] = 1.
             # TODO: calculate accuracy per class
