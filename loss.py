@@ -6,7 +6,7 @@ class multi_label_loss(nn.Module):
         super(multi_label_loss, self).__init__()
 
     def forward(self, predictions, target):
-        predictions = torch.sigmoid(predictions)
+        # predictions = torch.sigmoid(predictions)
         loss_fn = nn.BCELoss()
         loss = loss_fn(predictions, target)
 
