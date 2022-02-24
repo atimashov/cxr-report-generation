@@ -27,24 +27,24 @@ def train_my(loader, model, epochs = 3, device = None, loss_func = multi_label_l
 		num_samples = 0
 
 
-		# loop = tqdm(loader['train'], leave = True)
-		# for idx, (imgs, labels) in enumerate(loop):
-		# 	model.train()  # put model to training mode
-		# 	imgs = imgs.to(device = device, dtype = dtype)
-		# 	labels = labels.to(device = device, dtype = dtype)
-		#
-		# 	scores = model(imgs)
-		# 	loss = loss_func(scores, labels)
-		#
-		# 	# Zero out all of the gradients for the variables which the optimizer will update.
-		# 	optimizer.zero_grad()
-		#
-		# 	# Backwards pass and computing gradients
-		# 	loss.backward()
-		# 	optimizer.step()
-		#
-		# 	# display
-		# 	loop.set_postfix(current_loss=loss.item())
+		loop = tqdm(loader['train'], leave = True)
+		for idx, (imgs, labels) in enumerate(loop):
+			model.train()  # put model to training mode
+			imgs = imgs.to(device = device, dtype = dtype)
+			labels = labels.to(device = device, dtype = dtype)
+
+			scores = model(imgs)
+			loss = loss_func(scores, labels)
+
+			# Zero out all of the gradients for the variables which the optimizer will update.
+			optimizer.zero_grad()
+
+			# Backwards pass and computing gradients
+			loss.backward()
+			optimizer.step()
+
+			# display
+			loop.set_postfix(current_loss=loss.item())
 
 		# print metrics
 		train_acc, train_loss = get_metrics(loader = loader['train'], model = model, device = device, dtype = dtype)
