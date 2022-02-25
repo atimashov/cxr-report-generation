@@ -66,10 +66,10 @@ class iu_xray(Dataset):
 
 	def __getitem__(self, idx):
 		# load images and targets
-		img_path = '{}images/images_normalized/{}'.format(self.root, self.df['Path'][idx])
+		img_path = '{}images/images_normalized/{}'.format(self.root, self.df['filename'][idx])
 		img = Image.open(img_path).convert("RGB")
 		# TODO: projection is ignored at the moment;
-		img_id = '{}images/images_normalized/{}'.format(self.root, self.df['Path'][idx])
+		img_id = '{}images/images_normalized/{}'.format(self.root, self.df['uid'][idx])
 
 
 		trans = transforms.Compose([
