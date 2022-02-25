@@ -88,7 +88,7 @@ def test():
 
 	if inputs.dataset == 'chexpert':
 		data = chexpert_small(root = '/atlas/u/timashov/datasets/cxr')
-	elif inputs.dataset == 'iu cxr':
+	elif inputs.dataset == 'iu_cxr':
 		data = iu_xray()
 	data_loader = DataLoader(
 		data, batch_size = 4, shuffle = True, num_workers = 2, drop_last=True, pin_memory = True # TODO: increase number of workers
