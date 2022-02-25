@@ -31,7 +31,8 @@ def inference(n_classes, device, dtype):
 	# get an inference
 	all_preds = []
 	with torch.no_grad():
-		for i, (imgs, uids) in enumerate(loader):
+		loop = tqdm(loader['train'], leave=True)
+		for i, (imgs, uids) in enumerate(loop):
 			# move to device, e.g. GPU
 			imgs = imgs.to(device=device, dtype = dtype)
 			preds = model(imgs).cpu().detach().numpy()
