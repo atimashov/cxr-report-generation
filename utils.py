@@ -4,8 +4,8 @@ from loss import multi_label_loss
 from termcolor import colored
 
 
-def init_model(n_classes = 14):
-    model = efficientnet_b5(pretrained = True)  # params.transfer
+def init_model(n_classes = 14, pretrained = True):
+    model = efficientnet_b5(pretrained = pretrained)  # params.transfer
     # requires_grad = False
     num_ftrs = model.classifier[1].in_features
     model.classifier[1] = torch.nn.Linear(num_ftrs, n_classes)

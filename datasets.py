@@ -95,9 +95,6 @@ def test():
 	)
 	loop = tqdm(data_loader, leave = True)
 	for batch_idx, (imgs, labels) in enumerate(loop):
-		print(imgs)
-		print()
-		print(labels)
 		loop.set_postfix(imgs_shape=imgs.shape, lables_shape = labels.shape)
 
 if __name__=='__main__':
