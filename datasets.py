@@ -5,6 +5,7 @@ from PIL import Image
 from torchvision import transforms
 from torch.utils.data import Dataset, DataLoader
 from tqdm import tqdm
+from argparse import  ArgumentParser
 
 class chexpert_small(Dataset):
 	"""
@@ -50,14 +51,51 @@ class chexpert_small(Dataset):
 			])
 		return trans(img), targets
 
+class iu_xray(Dataset):
+	"""
+	TODO: add some description
+	TODO: will work only for inference / doesn't group by id (2 types of projections)
+	"""
+	def __init__(self, root = '/atlas/u/timashov/datasets/cxr/iu_cxr/', input_size = 224):
+		self.root = root
+		self.input_size = input_size
+		self.df = pd.read_csv('{}/indiana_projections.csv'.format(self.root))
+
+	def __len__(self):
+		return self.df.shape[0]
+
+	def __getitem__(self, idx):
+		# load images and targets
+		img_path = '{}images/images_normalized/{}'.format(self.root, self.df['Path'][idx])
+		img = Image.open(img_path).convert("RGB")
+		# TODO: projection is ignored at the moment;
+		img_id = '{}images/images_normalized/{}'.format(self.root, self.df['Path'][idx])
+
+
+		trans = transforms.Compose([
+			transforms.Resize((self.input_size, self.input_size)),
+			transforms.ToTensor(),
+			transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+		])
+		return trans(img), img_id
+
+
+
 def test():
-    data = chexpert_small(root = '/atlas/u/timashov/datasets/cxr')
-    data_loader = DataLoader(
-        data, batch_size = 4, shuffle = True, num_workers = 2, drop_last=True, pin_memory = True # TODO: increase number of workers
-    )
-    loop = tqdm(data_loader, leave = True)
-    for batch_idx, (imgs, labels) in enumerate(loop):
-        loop.set_postfix(imgs_shape=imgs.shape, lables_shape = labels.shape)
+	parser = ArgumentParser()
+	parser.add_argument('--dataset', type=str, default='chexpert', help='which dataset to test')
+	inputs = parser.parse_args()
+
+	if inputs.dataset == 'chexpert':
+		data = chexpert_small(root = '/atlas/u/timashov/datasets/cxr')
+	elif inputs.dataset == 'iu cxr':
+		data = iu_xray()
+	data_loader = DataLoader(
+		data, batch_size = 4, shuffle = True, num_workers = 2, drop_last=True, pin_memory = True # TODO: increase number of workers
+	)
+	loop = tqdm(data_loader, leave = True)
+	for batch_idx, (imgs, labels) in enumerate(loop):
+		loop.set_postfix(imgs_shape=imgs.shape, lables_shape = labels.shape)
 
 if __name__=='__main__':
 	test()
