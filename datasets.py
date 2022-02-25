@@ -69,7 +69,7 @@ class iu_xray(Dataset):
 		img_path = '{}images/images_normalized/{}'.format(self.root, self.df['filename'][idx])
 		img = Image.open(img_path).convert("RGB")
 		# TODO: projection is ignored at the moment;
-		img_id = '{}images/images_normalized/{}'.format(self.root, self.df['uid'][idx])
+		img_id = self.df['uid'][idx]
 
 
 		trans = transforms.Compose([
@@ -95,6 +95,9 @@ def test():
 	)
 	loop = tqdm(data_loader, leave = True)
 	for batch_idx, (imgs, labels) in enumerate(loop):
+		print(imgs)
+		print()
+		print(labels)
 		loop.set_postfix(imgs_shape=imgs.shape, lables_shape = labels.shape)
 
 if __name__=='__main__':
