@@ -125,7 +125,6 @@ class chestXRayDataset(Dataset):
             ])
         image  = preprocess(image).squeeze(0).type(torch.FloatTensor)
         
-        one_hot = self.one_hot_labels[idx]
         label = self.img_labels[idx]
 
         #rn = np.random.uniform()
