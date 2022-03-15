@@ -35,10 +35,10 @@ def inference(n_classes, device, dtype):
 		for i, (imgs, uids) in enumerate(loop):
 			# move to device, e.g. GPU
 			imgs = imgs.to(device=device, dtype = dtype)
-			preds = model(imgs).cpu().detach().numpy()
+			preds = torch.sigmoid(model(imgs)).cpu().detach().numpy()
 			uids = uids.cpu().detach().numpy().reshape(-1, 1)
 
-			all_preds.append(np.concatenate((torch.sigmoid(uids), preds), axis=1))
+			all_preds.append(np.concatenate((uids, preds), axis=1))
 
 	final_preds = np.concatenate(all_preds, axis=0)
 	columns = [
