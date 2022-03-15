@@ -77,7 +77,8 @@ class iu_xray(Dataset):
 		img_path = '{}images/images_normalized/{}'.format(self.root, self.df['filename'][idx])
 		img = Image.open(img_path).convert("RGB")
 		# TODO: projection is ignored at the moment;
-		img_id = self.df['uid'][idx]
+		proj = self.df['projection'][idx]
+		img_id = int(proj == 'Lateral') * 10000 + self.df['uid'][idx]
 
 
 		trans = transforms.Compose([
