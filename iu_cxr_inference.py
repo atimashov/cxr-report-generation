@@ -38,7 +38,7 @@ def inference(n_classes, device, dtype):
 			preds = model(imgs).cpu().detach().numpy()
 			uids = uids.cpu().detach().numpy().reshape(-1, 1)
 
-			all_preds.append(np.concatenate((uids, preds), axis=1))
+			all_preds.append(np.concatenate((torch.sigmoid(uids), preds), axis=1))
 
 	final_preds = np.concatenate(all_preds, axis=0)
 	columns = [
@@ -46,6 +46,7 @@ def inference(n_classes, device, dtype):
 		'Consolidation', 'Pneumonia', 'Atelectasis', 'Pneumothorax', 'Pleural Effusion', 'Pleural Other', 'Fracture',
 		'Support Devices'
 	]
+	print('recorded:', final_preds.shape)
 	df = pd.DataFrame(final_preds, columns = columns)
 	df.to_csv('iu_cxr_baseline.csv')
 
