@@ -26,10 +26,6 @@ def train_my(loader, model, epochs = 3, device = None, loss_func = multi_label_l
 		tloss, vloss = 0, 0
 		num_samples = 0
 
-		val_acc_cl, val_acc, val_loss = get_metrics(loader = loader['val'], model = model, device = device, dtype = dtype)
-		print('*****', val_acc_cl)
-
-
 		loop = tqdm(loader['train'], leave = True)
 		for idx, (imgs, labels) in enumerate(loop):
 			model.train()  # put model to training mode
