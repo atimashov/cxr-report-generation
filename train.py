@@ -47,10 +47,10 @@ def train_my(loader, model, epochs = 3, device = None, loss_func = multi_label_l
 			loop.set_postfix(current_loss=loss.item())
 
 		# print metrics
-		train_acc, train_loss = get_metrics(loader = loader['train'], model = model, device = device, dtype = dtype)
+		train_acc_cl, train_acc, train_loss = get_metrics(loader = loader['train'], model = model, device = device, dtype = dtype)
 
-		val_acc, val_loss = get_metrics(loader = loader['val'], model = model, device = device, dtype = dtype)
-
+		val_acc_cl, val_acc, val_loss = get_metrics(loader = loader['val'], model = model, device = device, dtype = dtype)
+		print('*****', val_acc_cl)
 		metrics = train_loss, val_loss, train_acc, val_acc
 		print_report(part='accuracy', metrics=metrics)
 

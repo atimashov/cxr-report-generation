@@ -26,6 +26,7 @@ def init_model(n_classes = 14, pretrained = True):
 
 def get_metrics(loader, model, device, dtype, loss_func = multi_label_loss(), max_num = 10000):
     num_correct = 0
+    num_correct_cl = np.zeros(14)
     num_samples = 0
     model.eval()  # set model to evaluation mode
     losses = []
@@ -46,13 +47,15 @@ def get_metrics(loader, model, device, dtype, loss_func = multi_label_loss(), ma
 
             # TODO: calculate accuracy per class
             num_correct += (preds == labels).sum()
+            num_correct_cl += (preds == labels).sum(dim = 1).cpu().detach().numpy()
             num_samples += preds.shape[0] * preds.shape[1]
 
             if i * imgs.shape[0] >= max_num:
                 break
         acc = float(num_correct) / num_samples
+        acc_cl = 14 * num_correct_cl / float(num_samples)
         loss = sum(losses) / len(losses)
-    return acc, loss
+    return acc_cl, acc, loss
 
 
 def print_report(part, epoch = None, t = None, metrics = None):
