@@ -47,7 +47,7 @@ def get_metrics(loader, model, device, dtype, loss_func = multi_label_loss(), ma
 
             # TODO: calculate accuracy per class
             num_correct += (preds == labels).sum()
-            num_correct_cl += (preds == labels).sum(dim = 1).cpu().detach().numpy()
+            num_correct_cl += (preds == labels).sum(dim = 0).cpu().detach().numpy()
             num_samples += preds.shape[0] * preds.shape[1]
 
             if i * imgs.shape[0] >= max_num:
